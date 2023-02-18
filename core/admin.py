@@ -1,8 +1,8 @@
 from django.contrib import admin
 
+admin.site.site_header = "Atlas Admin"
+admin.site.site_title = "Atlas Admin"
 
-admin.site.site_header = "Learning Admin"
-admin.site.site_title = "Learning Admin"
 
 class BaseAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
