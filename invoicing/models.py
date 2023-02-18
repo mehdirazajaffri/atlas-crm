@@ -65,10 +65,10 @@ class Invoice(BaseModel):
     invoice_type = models.CharField(max_length=50, choices=INVOICE_TYPE_CHOICES)
     invoice_date = models.DateField()
     due_date = models.DateField()
-    total_work_done = models.CharField(max_length=200)
-    previous_work_done = models.CharField(max_length=200)
-    current_work_done = models.CharField(max_length=200)
-    balance_work_done = models.CharField(max_length=200)
+    total_work_done = models.CharField(max_length=200, blank=True, null=True)
+    previous_work_done = models.CharField(max_length=200, blank=True, null=True)
+    current_work_done = models.CharField(max_length=200, blank=True, null=True)
+    balance_work_done = models.CharField(max_length=200, blank=True, null=True)
     advance = models.DecimalField(
         max_digits=100, decimal_places=0, blank=True, null=True
     )
