@@ -20,6 +20,7 @@ class Project(BaseModel):
         ("cancelled", "Cancelled"),
         ("onhold", "On Hold"),
     )
+    project_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
     type = models.CharField(max_length=50, choices=PROJECT_TYPES_CHOICES)
     name = models.CharField(max_length=100)
     client_name = models.CharField(max_length=100)
@@ -45,7 +46,7 @@ class Project(BaseModel):
     end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return str(self.id) + " - " + self.name
+        return str(self.project_id) + " - " + self.name
 
 
 class Invoice(BaseModel):
@@ -59,6 +60,7 @@ class Invoice(BaseModel):
         ("running", "Running"),
         ("final_bill", "Final Bill"),
     )
+    invoice_no = models.CharField(max_length=100, blank=True, null=True, unique=True)
     project = models.ForeignKey(Project, related_name="invoices", on_delete=models.CASCADE)
     invoice_type = models.CharField(max_length=50, choices=INVOICE_TYPE_CHOICES)
     invoice_date = models.DateField()
@@ -81,13 +83,12 @@ class Invoice(BaseModel):
     due_invoice_amount = models.DecimalField(
         max_digits=100, decimal_places=0, blank=True, null=True
     )
-
     status = models.CharField(max_length=50, choices=INVOICE_STATUS)
     void = models.BooleanField("Void", default=False)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "{} - {}".format(self.id, self.project.name)
+        return "{} - {}".format(self.invoice_no, self.project.name)
 
 
 class Payment(BaseModel):
@@ -105,7 +106,7 @@ class Payment(BaseModel):
 
     def __str__(self):
         return (
-                self.invoice.id
+                self.invoice.invoice_no
                 + " - "
                 + self.invoice.project.name
         )

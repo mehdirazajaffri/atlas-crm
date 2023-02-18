@@ -13,7 +13,8 @@ class InvoiceInline(admin.StackedInline):
 class ProjectAdmin(BaseAdmin):
     inlines = [InvoiceInline, ]
     list_display = (
-        "id",
+        "project_id",
+        "type",
         "name",
         "client_name",
         "location",
@@ -39,15 +40,18 @@ class InvoiceAdmin(BaseAdmin):
     inlines = [PaymentInline, ]
     search_fields = ("id", "project__id", "project__name",)
     list_display = (
-        ("id", "project", "invoice_date",
+        ("invoice_no", "invoice_type", "project", "invoice_date",
          "status", "due_invoice_amount",)
     )
-    list_filter = ("status", "void",)
+    list_filter = ("status", "void", "invoice_type", "project__project_id",)
+
+    class Media:
+        js = ('js/invoice.js',)
 
 
 @admin.register(Payment)
 class PaymentAdmin(BaseAdmin):
-    search_fields = ("invoice__id", "invoice__project__id", "invoice__project__name",)
+    search_fields = ("invoice__invoice_no", "invoice__project__project_id", "invoice__project__name",)
     list_display = (
         ("project_id", "invoice", "amount", "cheque_received_date", "bank_name", "cash")
     )
@@ -55,4 +59,4 @@ class PaymentAdmin(BaseAdmin):
                    "invoice__project__client_name", "invoice__project__location", "cheque_date",)
 
     def project_id(self, obj):
-        return obj.invoice.project.id
+        return obj.invoice.project.project_id or None
